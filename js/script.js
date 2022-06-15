@@ -1,3 +1,5 @@
+//Operator functions
+
 function add(num1, num2) {
     return num1 + num2;
 };
@@ -14,6 +16,7 @@ function divide(num1, num2) {
     return num1 / num2;
 };
 
+//Take numbers and operator to perform operator function
 function operate(operator, num1, num2) {
     switch (operator) {
         case '+':
@@ -29,3 +32,13 @@ function operate(operator, num1, num2) {
             return divide(num1, num2);
     };
 };
+
+const display = document.querySelector(".display");
+const buttons = document.querySelectorAll("button");
+
+//Listen for button press
+buttons.forEach(button => {
+    button.addEventListener("click", e => {
+        console.log(button.textContent);
+    });
+});
