@@ -33,12 +33,27 @@ function operate(operator, num1, num2) {
     };
 };
 
+function displayNumber(number) {
+    display.textContent = Number(number);
+}
+
 const display = document.querySelector(".display");
 const buttons = document.querySelectorAll("button");
+let displayValue = 0;
+let leftOperand = null;
+let rightOperand = null;
+let currentOperator = null;
+displayNumber(displayValue);
 
 //Listen for button press
 buttons.forEach(button => {
     button.addEventListener("click", e => {
-        console.log(button.textContent);
+        if (!isNaN(button.textContent)) {
+            displayValue += button.textContent.toString();
+            displayNumber(displayValue);
+        } else if (button.textContent == 'C'){
+            displayValue = '0';
+            display.textContent = Number(displayValue);
+        }   
     });
 });
