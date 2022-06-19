@@ -19,16 +19,16 @@ function divide(num1, num2) {
 //Take numbers and operator to perform operator function
 function operate(operator, num1, num2) {
     switch (operator) {
-        case '+':
+        case 'add':
             return add(num1, num2);
             break
-        case '-':
+        case 'subtract':
             return subtract(num1, num2);
             break
-        case '*':
+        case 'multiply':
             return multiply(num1, num2);
             break
-        case '/':
+        case 'divide':
             return divide(num1, num2);
     };
 };
@@ -52,8 +52,17 @@ buttons.forEach(button => {
             displayValue += button.textContent.toString();
             displayNumber(displayValue);
         } else if (button.textContent == 'C'){
-            displayValue = '0';
-            display.textContent = Number(displayValue);
-        }   
+            displayValue = 0;
+            displayNumber(displayValue);
+        } else if (button.className == "operator") {
+            leftOperand = Number(displayValue);
+            displayValue = 0;
+            currentOperator = button.id;
+            displayNumber(displayValue);
+        } else if (button.id == "evaluate") {
+            rightOperand = Number(displayValue);
+            displayValue = operate(currentOperator, leftOperand, rightOperand);
+            displayNumber(displayValue);
+        }
     });
 });
