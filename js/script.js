@@ -19,17 +19,17 @@ function divide(num1, num2) {
 //Take numbers and operator to perform operator function
 function operate(operator, num1, num2) {
     switch (operator) {
-        case 'add':
-            return add(num1, num2);
+        case "add":
+            return add(Number(num1), Number(num2));
             break
-        case 'subtract':
-            return subtract(num1, num2);
+        case "subtract":
+            return subtract(Number(num1), Number(num2));
             break
-        case 'multiply':
-            return multiply(num1, num2);
+        case "multiply":
+            return multiply(Number(num1), Number(num2));
             break
-        case 'divide':
-            return divide(num1, num2);
+        case "divide":
+            return divide(Number(num1), Number(num2));
     };
 };
 
@@ -39,30 +39,31 @@ function displayNumber(number) {
 
 const display = document.querySelector(".display");
 const buttons = document.querySelectorAll("button");
-let displayValue = 0;
-let leftOperand = null;
-let rightOperand = null;
-let currentOperator = null;
-displayNumber(displayValue);
+let leftOperand = 0;
+let rightOperand = 0;
+let currentOperator = "add";
+displayNumber(rightOperand);
 
 //Listen for button press
 buttons.forEach(button => {
     button.addEventListener("click", e => {
         if (!isNaN(button.textContent)) {
-            displayValue += button.textContent.toString();
-            displayNumber(displayValue);
-        } else if (button.textContent == 'C'){
-            displayValue = 0;
-            displayNumber(displayValue);
+            rightOperand += button.textContent.toString();
+            displayNumber(rightOperand);
+        } else if (button.textContent == "C"){
+            leftOperand = 0;
+            rightOperand = 0;
+            currentOperator = "add";
+            displayNumber(rightOperand);
         } else if (button.className == "operator") {
-            leftOperand = Number(displayValue);
-            displayValue = 0;
+            leftOperand = operate(currentOperator, leftOperand, rightOperand);
+            displayNumber(leftOperand);
+            rightOperand = 0;
             currentOperator = button.id;
-            displayNumber(displayValue);
         } else if (button.id == "evaluate") {
-            rightOperand = Number(displayValue);
-            displayValue = operate(currentOperator, leftOperand, rightOperand);
-            displayNumber(displayValue);
+            leftOperand = operate(currentOperator, leftOperand, rightOperand);
+            rightOperand = 0;
+            displayNumber(leftOperand);
         }
     });
 });
