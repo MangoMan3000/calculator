@@ -17,8 +17,9 @@ function divide(num1, num2) {
 
 //Function to clear stored variables
 function clear() {
-    currentValue = 0;
-    storedValue = null;
+    currentValue = "";
+    leftOperand = "";
+    rightOperand = "";
     currentOperator = null;
 }
 
@@ -39,10 +40,12 @@ function operate(operator, num1, num2) {
     };
 };
 
+//Display a number on screen
 function displayNumber(number) {
     display.textContent = Number(number);
 };
 
+//Add number to the display screen
 function appendNumber(number) {
     currentValue += number.toString();
     displayNumber(currentValue);
@@ -56,11 +59,14 @@ const display = document.querySelector(".display");
 const buttons = document.querySelectorAll("button");
 const numberButtons = document.querySelectorAll(".number");
 const operatorButtons = document.querySelectorAll(".operator");
-let currentValue = '';
-let storedValue = null;
+let currentValue = "";
+let leftOperand = "";
+let rightOperand = "";
 let currentOperator = null;
+
 displayNumber(currentValue);
 
+//Add number to the Calculator Display
 numberButtons.forEach(button => {
     button.addEventListener("click", ()=> {
         appendNumber(button.textContent);
@@ -69,9 +75,32 @@ numberButtons.forEach(button => {
 
 operatorButtons.forEach(button => {
     button.addEventListener("click", () => {
+        if (currentOperator == null && leftOperand == "") {
+            leftOperand = currentValue;
+        } else if (currentValue == "") {
+            return;
+        }
         chooseOperator(button.id);
+        currentValue = "";
     });
 });
+
+document.querySelector("#evaluate").addEventListener("click", () => {
+    if (currentOperator == null) {
+        return;
+    } else {
+        rightOperand = currentValue;
+        currentValue = "";
+        leftOperand = operate(currentOperator, Number(leftOperand), Number(rightOperand));
+        displayNumber(leftOperand);
+        currentOperator = null;
+    };
+});
+
+document.querySelector("#clear").addEventListener("click", () => {
+    clear();
+    displayNumber(currentValue);
+})
 
 // //Listen for button press
 // buttons.forEach(button => {
