@@ -19,7 +19,6 @@ function clear() {
     leftOperand = "";
     rightOperand = "";
     currentOperator = null;
-    displayNumber(Number(currentValue));
 }
 
 function operate(operator, num1, num2) {
@@ -40,6 +39,13 @@ function operate(operator, num1, num2) {
             return divide(Number(num1), Number(num2));
     };
 };
+
+function performOperation() {
+    rightOperand = currentValue;
+    currentValue = "";
+    leftOperand = operate(currentOperator, Number(leftOperand), Number(rightOperand));
+    displayNumber(leftOperand);
+}
 
 //Display a number on calculator screen
 function displayNumber(number) {
@@ -75,6 +81,9 @@ numberButtons.forEach(button => {
 
 operatorButtons.forEach(button => {
     button.addEventListener("click", () => {
+        if (leftOperand == "To Infinity...AND BEYOND"){
+            leftOperand = "";
+        }
         if (currentOperator == null && leftOperand == "") {
             leftOperand = currentValue;
             currentValue = "";
@@ -83,27 +92,25 @@ operatorButtons.forEach(button => {
             chooseOperator(button.id);
             displayNumber(leftOperand);
         } else {
-            rightOperand = currentValue;
-            currentValue = "";
-            leftOperand = operate(currentOperator, Number(leftOperand), Number(rightOperand));
+            performOperation();
             chooseOperator(button.id);
-            displayNumber(leftOperand);
         };
     });
 });
 
 document.querySelector("#evaluate").addEventListener("click", () => {
+    if (leftOperand == "To Infinity...AND BEYOND"){
+        leftOperand = "";
+    }
     if (currentOperator == null || currentValue == "") {
         return;
     } else {
-        rightOperand = currentValue;
-        currentValue = "";
-        leftOperand = operate(currentOperator, Number(leftOperand), Number(rightOperand));
-        displayNumber(leftOperand);
+        performOperation();
         currentOperator = null;
     };
 });
 
 document.querySelector("#clear").addEventListener("click", () => {
     clear();
+    displayNumber(Number(currentValue));
 });
