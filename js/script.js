@@ -19,9 +19,13 @@ function clear() {
     leftOperand = "";
     rightOperand = "";
     currentOperator = null;
+    displayNumber(Number(currentValue));
 }
 
 function operate(operator, num1, num2) {
+    if (operator == "divide" && Number(num2) == 0) {
+        return "To Infinity...AND BEYOND"
+    }
     switch (operator) {
         case "add":
             return add(Number(num1), Number(num2));
@@ -39,13 +43,13 @@ function operate(operator, num1, num2) {
 
 //Display a number on calculator screen
 function displayNumber(number) {
-    display.textContent = Number(number);
+    display.textContent = number;
 };
 
 //Add number to the display screen
 function appendNumber(number) {
     currentValue += number.toString();
-    displayNumber(currentValue);
+    displayNumber(Number(currentValue));
 }
 
 function chooseOperator(operator) {
@@ -61,7 +65,7 @@ let leftOperand = "";
 let rightOperand = "";
 let currentOperator = null;
 
-displayNumber(currentValue);
+displayNumber(0);
 
 numberButtons.forEach(button => {
     button.addEventListener("click", ()=> {
@@ -102,5 +106,4 @@ document.querySelector("#evaluate").addEventListener("click", () => {
 
 document.querySelector("#clear").addEventListener("click", () => {
     clear();
-    displayNumber(currentValue);
 });
