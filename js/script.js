@@ -19,6 +19,7 @@ function clear() {
     leftOperand = "";
     rightOperand = "";
     currentOperator = null;
+    isDecimal = false;
 }
 
 function operate(operator, num1, num2) {
@@ -45,17 +46,16 @@ function performOperation() {
     currentValue = "";
     leftOperand = operate(currentOperator, Number(leftOperand), Number(rightOperand));
     displayNumber(leftOperand);
+    isDecimal = false;
 }
 
-//Display a number on calculator screen
 function displayNumber(number) {
     display.textContent = number;
 };
 
-//Add number to the display screen
+//Add text.Content of clicked button to the display screen
 function appendNumber(number) {
     currentValue += number.toString();
-    displayNumber(Number(currentValue));
 }
 
 function chooseOperator(operator) {
@@ -70,15 +70,19 @@ let currentValue = "";
 let leftOperand = "";
 let rightOperand = "";
 let currentOperator = null;
+let isDecimal = false;
 
 displayNumber(0);
 
+//If clicking button, add number to calculator display
 numberButtons.forEach(button => {
     button.addEventListener("click", ()=> {
         appendNumber(button.textContent);
+        displayNumber(Number(currentValue));
     });
 });
 
+//If clicking operator buttons, choose set current operator and perform operation if required
 operatorButtons.forEach(button => {
     button.addEventListener("click", () => {
         if (leftOperand == "To Infinity...AND BEYOND"){
@@ -95,9 +99,11 @@ operatorButtons.forEach(button => {
             performOperation();
             chooseOperator(button.id);
         };
+        isDecimal = false;
     });
 });
 
+//If clicking equals button, operate left and right operand
 document.querySelector("#evaluate").addEventListener("click", () => {
     if (leftOperand == "To Infinity...AND BEYOND"){
         leftOperand = "";
@@ -110,7 +116,21 @@ document.querySelector("#evaluate").addEventListener("click", () => {
     };
 });
 
+//If clicking clear button, clear all variables
 document.querySelector("#clear").addEventListener("click", () => {
     clear();
     displayNumber(Number(currentValue));
+});
+
+//If clicking decimal, toggle on isDecimal variable, if on already, do nothing
+document.querySelector("#decimal").addEventListener("click", ()=> {
+    if (isDecimal == false) {
+        if (currentValue == "") {
+            appendNumber("0.");
+            isDecimal = true;
+        } else {
+            appendNumber(".");
+        }
+    }
+    displayNumber(currentValue);   
 });
