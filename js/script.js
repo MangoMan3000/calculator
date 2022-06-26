@@ -87,7 +87,7 @@ operatorButtons.forEach(button => {
     button.addEventListener("click", () => {
         if (leftOperand == "To Infinity...AND BEYOND"){
             leftOperand = "";
-        }
+        };
         if (currentOperator == null && leftOperand == "") {
             leftOperand = currentValue;
             currentValue = "";
@@ -107,7 +107,7 @@ operatorButtons.forEach(button => {
 document.querySelector("#evaluate").addEventListener("click", () => {
     if (leftOperand == "To Infinity...AND BEYOND"){
         leftOperand = "";
-    }
+    };
     if (currentOperator == null || currentValue == "") {
         return;
     } else {
@@ -130,7 +130,19 @@ document.querySelector("#decimal").addEventListener("click", ()=> {
             isDecimal = true;
         } else {
             appendNumber(".");
-        }
-    }
+        };
+    };
     displayNumber(currentValue);   
+});
+
+document.querySelector("#backspace").addEventListener("click", () => {
+    if (leftOperand == "To Infinity...AND BEYOND") {
+        leftOperand == "";
+    };
+    if (currentValue == "") {
+        return;
+    } else {
+        currentValue = currentValue.slice(0,-1);
+        displayNumber(Number(currentValue));
+    };
 });

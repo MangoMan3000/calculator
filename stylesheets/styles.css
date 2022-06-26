@@ -1,3 +1,7 @@
+h1 {
+    font-size: 50px;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -16,11 +20,14 @@ body {
 }
 
 .display {
+    border-style: solid;
+    border-radius: 5%;
+    font-size: large;
     height: 50px;
     background-color: cadetblue;
     flex: 1;
-    width: 90%;
-    margin: 10px;
+    width: 80%;
+    margin: 5px;
     display: flex;
     justify-content: end;
     align-items: center;
@@ -43,4 +50,20 @@ body {
 button {
     margin: 10px;
     flex: 1;
+}
+
+.number, #decimal {
+    background-color: lightgray;
+}
+
+.operator {
+    background-color: grey;
+}
+
+#evaluate {
+    background-color: gray;
+}
+
+.deletion {
+    background-color: lightpink;
 }
