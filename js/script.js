@@ -53,14 +53,63 @@ function displayNumber(number) {
     display.textContent = number;
 };
 
-//Add text.Content of clicked button to the display screen
 function appendNumber(number) {
     currentValue += number.toString();
-}
+};
 
-function chooseOperator(operator) {
-    currentOperator = operator;
-}
+function resetLeftOperand() {
+    if (leftOperand == "To Infinity...AND BEYOND"){
+        leftOperand = "";
+    };
+};
+
+function setOperator(operator) {
+    resetLeftOperand()
+    if (currentOperator == null && leftOperand == "") {
+        leftOperand = currentValue;
+        currentValue = "";
+        currentOperator = operator;
+    } else if (currentValue == "") {
+        currentOperator = operator;
+        displayNumber(leftOperand);
+    } else {
+        performOperation();
+        currentOperator = operator;
+    };
+    isDecimal = false;
+};
+
+function evaluateButton() {
+    resetLeftOperand()
+    if (currentOperator == null || currentValue == "") {
+        return;
+    } else {
+        performOperation();
+        currentOperator = null;
+    };
+};
+
+function addDecimal() {
+    if (isDecimal == false) {
+        if (currentValue == "") {
+            appendNumber("0.");
+            isDecimal = true;
+        } else {
+            appendNumber(".");
+        };
+    };
+    displayNumber(currentValue); 
+};
+
+function backspace() {
+    resetLeftOperand()
+    if (currentValue == "") {
+        return;
+    } else {
+        currentValue = currentValue.slice(0,-1);
+        displayNumber(Number(currentValue));
+    };
+};
 
 const display = document.querySelector(".display");
 const buttons = document.querySelectorAll("button");
@@ -85,35 +134,13 @@ numberButtons.forEach(button => {
 //If clicking operator buttons, choose set current operator and perform operation if required
 operatorButtons.forEach(button => {
     button.addEventListener("click", () => {
-        if (leftOperand == "To Infinity...AND BEYOND"){
-            leftOperand = "";
-        };
-        if (currentOperator == null && leftOperand == "") {
-            leftOperand = currentValue;
-            currentValue = "";
-            chooseOperator(button.id);
-        } else if (currentValue == "") {
-            chooseOperator(button.id);
-            displayNumber(leftOperand);
-        } else {
-            performOperation();
-            chooseOperator(button.id);
-        };
-        isDecimal = false;
+        setOperator(button.id);
     });
 });
 
 //If clicking equals button, operate left and right operand
 document.querySelector("#evaluate").addEventListener("click", () => {
-    if (leftOperand == "To Infinity...AND BEYOND"){
-        leftOperand = "";
-    };
-    if (currentOperator == null || currentValue == "") {
-        return;
-    } else {
-        performOperation();
-        currentOperator = null;
-    };
+    evaluateButton(); 
 });
 
 //If clicking clear button, clear all variables
@@ -124,26 +151,45 @@ document.querySelector("#clear").addEventListener("click", () => {
 
 //If clicking decimal, toggle on isDecimal variable, if on already, do nothing
 document.querySelector("#decimal").addEventListener("click", ()=> {
-    if (isDecimal == false) {
-        if (currentValue == "") {
-            appendNumber("0.");
-            isDecimal = true;
-        } else {
-            appendNumber(".");
-        };
-    };
-    displayNumber(currentValue);   
+    addDecimal()  ;
 });
 
 //If clicking Delete, slice last item from current value, display value
 document.querySelector("#backspace").addEventListener("click", () => {
-    if (leftOperand == "To Infinity...AND BEYOND") {
-        leftOperand == "";
-    };
-    if (currentValue == "") {
-        return;
-    } else {
-        currentValue = currentValue.slice(0,-1);
+    backspace();
+});
+
+//Keyboard Support
+window.addEventListener("keyup", (e) => {
+    if (e.key >= 0 || e.key <= 9) {
+        appendNumber(e.key);
         displayNumber(Number(currentValue));
-    };
+    }
+    switch (e.key) {
+        case "/":
+            setOperator("divide");
+            break
+        case "*":
+            setOperator("multiply");
+            break
+        case "+":
+            setOperator("add");
+            break
+        case "-":
+            setOperator("subtract");
+            break
+    }
+    if (e.key == "Enter") {
+        evaluateButton();
+    }
+    if (e.key == ".") {
+        addDecimal();
+    }
+    if (e.key == "Backspace") {
+        backspace();
+    }
+    if (e.key == "Delete") {
+        clear();
+        displayNumber(Number(currentValue));
+    }
 });
