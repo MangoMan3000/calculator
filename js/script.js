@@ -135,6 +135,7 @@ document.querySelector("#decimal").addEventListener("click", ()=> {
     displayNumber(currentValue);   
 });
 
+//If clicking Delete, slice last item from current value, display value
 document.querySelector("#backspace").addEventListener("click", () => {
     if (leftOperand == "To Infinity...AND BEYOND") {
         leftOperand == "";
