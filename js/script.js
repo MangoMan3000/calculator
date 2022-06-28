@@ -45,6 +45,7 @@ function performOperation() {
     rightOperand = currentValue;
     currentValue = "";
     leftOperand = operate(currentOperator, Number(leftOperand), Number(rightOperand));
+    currentOperator = null;
     displayNumber(leftOperand);
     isDecimal = false;
 }
@@ -69,9 +70,9 @@ function setOperator(operator) {
         leftOperand = currentValue;
         currentValue = "";
         currentOperator = operator;
-    } else if (currentValue == "") {
+    } else if (currentValue == "" || currentOperator == operator) {
         currentOperator = operator;
-        displayNumber(leftOperand);
+        displayNumber(Number(leftOperand));
     } else {
         performOperation();
         currentOperator = operator;
@@ -96,6 +97,7 @@ function addDecimal() {
             isDecimal = true;
         } else {
             appendNumber(".");
+            isDecimal = true;
         };
     };
     displayNumber(currentValue); 
@@ -112,7 +114,6 @@ function backspace() {
 };
 
 const display = document.querySelector(".display");
-const buttons = document.querySelectorAll("button");
 const numberButtons = document.querySelectorAll(".number");
 const operatorButtons = document.querySelectorAll(".operator");
 let currentValue = "";
@@ -121,9 +122,8 @@ let rightOperand = "";
 let currentOperator = null;
 let isDecimal = false;
 
-displayNumber(0);
+displayNumber(Number(currentValue));
 
-//If clicking button, add number to calculator display
 numberButtons.forEach(button => {
     button.addEventListener("click", ()=> {
         appendNumber(button.textContent);
@@ -131,30 +131,25 @@ numberButtons.forEach(button => {
     });
 });
 
-//If clicking operator buttons, choose set current operator and perform operation if required
 operatorButtons.forEach(button => {
     button.addEventListener("click", () => {
         setOperator(button.id);
     });
 });
 
-//If clicking equals button, operate left and right operand
 document.querySelector("#evaluate").addEventListener("click", () => {
     evaluateButton(); 
 });
 
-//If clicking clear button, clear all variables
 document.querySelector("#clear").addEventListener("click", () => {
     clear();
     displayNumber(Number(currentValue));
 });
 
-//If clicking decimal, toggle on isDecimal variable, if on already, do nothing
 document.querySelector("#decimal").addEventListener("click", ()=> {
     addDecimal()  ;
 });
 
-//If clicking Delete, slice last item from current value, display value
 document.querySelector("#backspace").addEventListener("click", () => {
     backspace();
 });
@@ -178,18 +173,18 @@ window.addEventListener("keyup", (e) => {
         case "-":
             setOperator("subtract");
             break
-    }
-    if (e.key == "Enter") {
-        evaluateButton();
-    }
-    if (e.key == ".") {
-        addDecimal();
-    }
-    if (e.key == "Backspace") {
-        backspace();
-    }
-    if (e.key == "Delete") {
-        clear();
-        displayNumber(Number(currentValue));
+        case "Enter":
+            evaluateButton();
+            break
+        case ".":
+            addDecimal();
+            break
+        case "Backspace":
+            backspace();
+            break
+        case "Delete":
+            clear();
+            displayNumber(Number(currentValue));
+            break
     }
 });
